@@ -4,12 +4,6 @@
 #include <DS3232RTC.h>    //http://github.com/JChristensen/DS3232RTC
 
 
-/* Based on Blink without Delay, David A. Mellis, Paul Stoffregen, Scott Fitzgerald
-
-*/
-
-
-
 /**********************************
 * Setting up constants
 ***********************************/
@@ -160,6 +154,29 @@ void makeISOdate(){
       year(t), month(t), day(t), hour(t), minute(t), second(t));
 }
 
+String returnISOdate() {
+  time_t t = now();
+  sprintf(isodate, "%4d-%02d-%02dT%02d:%02d:%02dZ",
+      year(t), month(t), day(t), hour(t), minute(t), second(t));
+  return (String(isodate));
+}
+
+String formatJSON(String tm, void *lum, float temp) {
+  Luminosity *lum2 = (Luminosity*)lum;
+  String JSON;
+  JSON = "{\"datetime\":\"" + tm + "\"," + 
+         "\"Temperature\":" + String(temp) + "," + 
+        "\"Luminosity\": {" + 
+            "\"IR\":" + String(lum2->IR) + "," +
+            "\"Full\":" + String(lum2->Full) + "," +
+            "\"Visible\":" + String(lum2->Visible) + "," +
+            "\"Lux\":" + String(lum2->Lux) + "}" + 
+        "}";
+    return (JSON);
+        
+}
+
+
 void loop()
 {
   uint8_t i;
@@ -204,21 +221,11 @@ void loop()
     Serial.print("Lux: "); Serial.println(lum.Lux);
 //
 
-
-//    Serial.print(hour());
-//    printDigits(minute());
-//    printDigits(second());
-//    Serial.print(' ');
-//    Serial.print(day());
-//    Serial.print(' ');
-//    Serial.print(month());
-//    Serial.print(' ');
-//    Serial.print(year()); 
-//    Serial.println();
-makeISOdate();
-    Serial.println(isodate);
     
+    Serial.println(returnISOdate());
     
+    Serial.println( formatJSON(returnISOdate(), &lum, temperatureValue) );
+      
 //    int seconds = Wire.read(); // get seconds
 //    int minutes = Wire.read(); // get minutes
 //    int hours = Wire.read();   // get hours
