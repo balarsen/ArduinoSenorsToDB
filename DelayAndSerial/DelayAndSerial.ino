@@ -38,7 +38,6 @@ void setup() {
   }
   Serial.println("Starting up!"); 
 
-  Serial.println(TEMPERATURES[2]); 
 
 }
 
