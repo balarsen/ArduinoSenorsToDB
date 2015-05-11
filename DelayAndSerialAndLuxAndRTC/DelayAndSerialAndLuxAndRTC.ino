@@ -201,10 +201,6 @@ void loop()
       delay(10);
     }
     float temperatureValue = ThermToTemp( ((float)thermistorValue / (float)NUMSAMPLES) ); 
-    Serial.print("Temperature "); 
-    Serial.print(temperatureValue);
-    Serial.println(" *C");
-
 
     Luminosity lum; //  = getLuminosity();
     
@@ -213,29 +209,9 @@ void loop()
     lum.Full = tmp & 0xFFFF;
     lum.Visible = lum.Full - lum.IR;
     lum.Lux = tsl.calculateLux(lum.Full, lum.IR);
-    
-    Serial.print("IR: "); Serial.print(lum.IR);   Serial.print("\t\t");
-    Serial.print("Full: "); Serial.print(lum.Full);   Serial.print("\t");
-    Serial.print("Visible: "); Serial.print(lum.Full - lum.IR);   Serial.print("\t");
-  
-    Serial.print("Lux: "); Serial.println(lum.Lux);
-//
-
-    
-    Serial.println(returnISOdate());
-    
+        
     Serial.println( formatJSON(returnISOdate(), &lum, temperatureValue) );
       
-//    int seconds = Wire.read(); // get seconds
-//    int minutes = Wire.read(); // get minutes
-//    int hours = Wire.read();   // get hours
-// 
-//    seconds = (((seconds & 0b11110000)>>4)*10 + (seconds & 0b00001111)); // convert BCD to decimal
-//    minutes = (((minutes & 0b11110000)>>4)*10 + (minutes & 0b00001111)); // convert BCD to decimal
-//    hours = (((hours & 0b00100000)>>5)*20 + ((hours & 0b00010000)>>4)*10 + (hours & 0b00001111)); // convert BCD to decimal (assume 24 hour mode)
-// 
-//    Serial.print(hours); Serial.print(":"); Serial.print(minutes); Serial.print(":"); Serial.println(seconds);
-// 
   }
 }
 
