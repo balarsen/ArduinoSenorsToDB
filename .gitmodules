@@ -1,0 +1,3 @@
+[submodule "Python/materials"]
+	path = Python/materials
+	url = git@github.com:realpython/materials.git
