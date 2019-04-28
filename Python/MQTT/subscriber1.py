@@ -49,10 +49,10 @@ def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
     client.subscribe("topic/test")
 
-
 def _msg_to_db(msg, rectime):
     pprint((rectime, msg))
-    df = pd.DataFrame({'rectime': rectime, 'message': msg['Message']}, index=pd.DatetimeIndex([msg['datetime']]))
+    df = pd.DataFrame.from_dict(msg).set_index('datetime', drop=True)
+    df['rectime'] = rectime
     print(df)
     df.to_sql('message', con=engine, if_exists='append')
     # ins = message.insert().values(rectime=rectime.isoformat(), sendtime=msg['datetime'],

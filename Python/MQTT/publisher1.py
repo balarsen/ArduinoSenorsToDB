@@ -22,7 +22,10 @@ client.connect("localhost", 1883, 60)
 # At most once(0)
 # At least once(1)
 # Exactly once(2).
+message_json = json.dumps(message, cls=NumpyEncoder.NumpyEncoder)
+
 client.publish("topic/test",
                payload=json.dumps(message, cls=NumpyEncoder.NumpyEncoder),
                qos=1)
 client.disconnect()
+
