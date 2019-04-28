@@ -5,3 +5,4 @@ SQLAlchemy
 flask_marshmallow
 Marshmallow
 marshmallow-sqlalchemy
+paho-mqtt
