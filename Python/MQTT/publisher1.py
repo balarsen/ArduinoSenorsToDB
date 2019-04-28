@@ -3,12 +3,18 @@
 
 import datetime
 import json
+import numpy as np
 
 import paho.mqtt.client as mqtt
 
+import NumpyEncoder
+
 # This is the Publisher
 
-message = {"Message": "Hello World!", "datetime": datetime.datetime.now().isoformat()}
+data = np.random.random_sample(1)
+message = {"Message": "Hello World!",
+           "datetime": datetime.datetime.now().isoformat(),
+           "data":data}
 
 client = mqtt.Client()
 client.connect("localhost", 1883, 60)
@@ -16,5 +22,7 @@ client.connect("localhost", 1883, 60)
 # At most once(0)
 # At least once(1)
 # Exactly once(2).
-client.publish("topic/test", payload=json.dumps(message), qos=1)
+client.publish("topic/test",
+               payload=json.dumps(message, cls=NumpyEncoder.NumpyEncoder),
+               qos=1)
 client.disconnect()

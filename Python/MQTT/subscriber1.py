@@ -3,10 +3,12 @@
 
 import datetime
 import json
+from pprint import pprint
 
-import dateutil.parser
 import paho.mqtt.client as mqtt
 import pandas as pd
+from sqlalchemy import create_engine
+
 # from sqlalchemy import create_engine, MetaData, Table, Column
 # from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy import Column, Integer, String, BigInteger, DateTime
@@ -26,8 +28,6 @@ import pandas as pd
 #                 Column('sendtime', String),
 #                 Column('message', String))
 # meta.create_all(engine)
-
-
 # class Message(Base):
 #     __tablename__ = 'message'
 #     id = Column(BigInteger, primary_key=True)
@@ -40,8 +40,6 @@ import pandas as pd
 #                                                                             self.message)
 #
 
-from sqlalchemy import create_engine
-
 engine = create_engine('sqlite:///mqtt_test.sqlite', echo=True)
 
 
@@ -53,7 +51,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def _msg_to_db(msg, rectime):
-    print(rectime, msg['datetime'], msg['Message'])
+    pprint((rectime, msg))
     df = pd.DataFrame({'rectime': rectime, 'message': msg['Message']}, index=pd.DatetimeIndex([msg['datetime']]))
     print(df)
     df.to_sql('message', con=engine, if_exists='append')
